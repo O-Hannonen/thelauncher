@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:thelauncher/reusableWidgets/neumorphicContainer.dart';
@@ -16,9 +15,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   MediaQueryData mediaQuery;
-  double appSideWidth;
+  double width;
+  double height;
 
   Widget buildSingleApp({dynamic app}) {
+    double side = min((height / 4) - 30, (width / 2) - 30);
+    if (app == null) {
+      return Container(
+        margin: const EdgeInsets.all(15.0),
+        width: side,
+        height: side,
+      );
+    }
+
     return GestureDetector(
       onTap: () async {
         await DeviceApps.openApp(app.packageName);
@@ -26,30 +35,28 @@ class _HomeScreenState extends State<HomeScreen> {
       child: NeumorphicContainer(
         margin: const EdgeInsets.all(15.0),
         padding: const EdgeInsets.all(15.0),
-        width: appSideWidth,
-        height: appSideWidth,
+        width: side,
+        height: side,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             NeumorphicContainer(
-              width: (appSideWidth - 40) * 0.5,
-              height: (appSideWidth - 40) * 0.5,
+              width: (side - 40) * 0.5,
+              height: (side - 40) * 0.5,
               shape: BoxShape.circle,
               style: Style.emboss,
               margin: const EdgeInsets.all(5.0),
-              //   padding: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.all(5.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(500),
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      Colors.grey,
-                      BlendMode.saturation,
-                    ),
-                    child: Image.memory(
-                      app.icon,
-                    ),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    Colors.grey,
+                    BlendMode.saturation,
+                  ),
+                  child: Image.memory(
+                    app.icon,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -59,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15.0,
-                color: Colors.orange,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ],
@@ -71,16 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
-    final w1 = mediaQuery.size.width * 0.5 - 30;
-    final w2 = ((mediaQuery.size.height -
-                mediaQuery.viewInsets.top -
-                mediaQuery.padding.top -
-                mediaQuery.viewInsets.bottom -
-                mediaQuery.padding.bottom) /
-            3) -
-        30;
-
-    appSideWidth = min(w1, w2);
+    width = mediaQuery.size.width;
+    height = mediaQuery.size.height -
+        mediaQuery.viewInsets.top -
+        mediaQuery.padding.top -
+        mediaQuery.viewInsets.bottom -
+        mediaQuery.padding.bottom;
 
     return Material(
       color: Theme.of(context).backgroundColor,
@@ -94,18 +97,22 @@ class _HomeScreenState extends State<HomeScreen> {
             return Container();
           }
 
-          List apps = snapshot.data.take(6).toList();
-
-          return GridView.count(
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            children: apps
-                .map(
-                  (app) => buildSingleApp(
-                    app: app,
-                  ),
-                )
-                .toList(),
+          return SafeArea(
+            child: Container(
+              height: height,
+              width: width,
+              child: Wrap(
+                runAlignment: WrapAlignment.end,
+                crossAxisAlignment: WrapCrossAlignment.end,
+                children: List.generate(
+                  8,
+                  (i) => buildSingleApp(
+                      app: snapshot.data.length - 1 >= i
+                          ? snapshot.data[i]
+                          : null),
+                ),
+              ),
+            ),
           );
         },
       ),

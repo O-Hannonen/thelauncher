@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:thelauncher/homeScreen/widgets/homeScreen.dart';
+import 'package:thelauncher/reusableWidgets/inputField.dart';
+import 'package:get/get.dart';
+import 'package:thelauncher/searchPage/widgets/searchPage.dart';
 
 /// The body of this launcher. By default displays the main screen of the launcher,
 /// but also handles all the swiping gestures etc...
@@ -12,6 +15,41 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  PageController verticalController;
+  PageController horizontalController;
+  MediaQueryData mediaQuery;
+
+  @override
+  void initState() {
+    super.initState();
+    verticalController = PageController(initialPage: 1);
+    horizontalController = PageController(initialPage: 1);
+    verticalController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (verticalController.offset <=
+        mediaQuery.size.height -
+            mediaQuery.viewPadding.top -
+            mediaQuery.size.width * 0.15 -
+            30) {
+      verticalController.animateToPage(
+        1,
+        duration: Duration(milliseconds: 150),
+        curve: Curves.ease,
+      );
+      Get.to(SearchPage(), duration: Duration(milliseconds: 0));
+    }
+  }
+
+  @override
+  void dispose() {
+    verticalController.dispose();
+    horizontalController.dispose();
+
+    super.dispose();
+  }
+
   Widget buildPage(Color color) {
     final mediaQuery = MediaQuery.of(context);
     return Container(
@@ -23,19 +61,33 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    mediaQuery = MediaQuery.of(context);
     return PageView(
       scrollDirection: Axis.horizontal,
-      controller: PageController(initialPage: 1),
+      controller: horizontalController,
       children: [
         // widgets page
         buildPage(Colors.blue),
 
         PageView(
           scrollDirection: Axis.vertical,
-          controller: PageController(initialPage: 1),
+          controller: verticalController,
           children: [
             //search page
-            buildPage(Colors.red),
+            Material(
+              color: Theme.of(context).backgroundColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Hero(
+                    tag: "searchInput",
+                    child: InputField(
+                      title: "Search",
+                    ),
+                  ),
+                ],
+              ),
+            ),
             // home screen
             HomeScreen(),
             // contacts
