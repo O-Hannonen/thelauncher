@@ -3,6 +3,7 @@ import 'package:thelauncher/homeScreen/widgets/homeScreen.dart';
 import 'package:thelauncher/reusableWidgets/inputField.dart';
 import 'package:get/get.dart';
 import 'package:thelauncher/searchPage/widgets/searchPage.dart';
+import 'package:thelauncher/services/service_locator.dart';
 
 /// The body of this launcher. By default displays the main screen of the launcher,
 /// but also handles all the swiping gestures etc...
@@ -62,41 +63,54 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
-    return PageView(
-      scrollDirection: Axis.horizontal,
-      controller: horizontalController,
-      children: [
-        // widgets page
-        buildPage(Colors.blue),
+    return FutureBuilder(
+      future: locator.allReady(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          print("waiting for locator to be ready");
+          return Material(
+            color: Theme.of(context).backgroundColor,
+          );
+        }
 
-        PageView(
-          scrollDirection: Axis.vertical,
-          controller: verticalController,
+        print("building pageview");
+        return PageView(
+          scrollDirection: Axis.horizontal,
+          controller: horizontalController,
           children: [
-            //search page
-            Material(
-              color: Theme.of(context).backgroundColor,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Hero(
-                    tag: "searchInput",
-                    child: InputField(
-                      title: "Search",
-                    ),
+            // widgets page
+            buildPage(Colors.blue),
+
+            PageView(
+              scrollDirection: Axis.vertical,
+              controller: verticalController,
+              children: [
+                //search page
+                Material(
+                  color: Theme.of(context).backgroundColor,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Hero(
+                        tag: "searchInput",
+                        child: InputField(
+                          title: "Search",
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                // home screen
+                HomeScreen(),
+                // contacts
+                buildPage(Colors.orange),
+              ],
             ),
-            // home screen
-            HomeScreen(),
-            // contacts
-            buildPage(Colors.orange),
+            // news page
+            buildPage(Colors.yellow),
           ],
-        ),
-        // news page
-        buildPage(Colors.yellow),
-      ],
+        );
+      },
     );
   }
 }

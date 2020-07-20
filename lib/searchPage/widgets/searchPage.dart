@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:thelauncher/reusableWidgets/inputField.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:thelauncher/reusableWidgets/neumorphicContainer.dart';
+import 'package:thelauncher/services/service_locator.dart';
+import 'package:thelauncher/services/storageService.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
@@ -13,10 +15,10 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  Map<String, dynamic> apps;
-  List filteredApps;
+  List<String> filteredApps;
   TextEditingController searchController;
   MediaQueryData mediaQuery;
+  StorageService storage = locator<StorageService>();
 
   @override
   void initState() {
@@ -30,32 +32,11 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
-  Future<bool> getApps() async {
-    if (apps != null) {
-      return true;
-    }
-
-    apps = {};
-
-    filteredApps = await DeviceApps.getInstalledApplications(
-      onlyAppsWithLaunchIntent: true,
-      includeAppIcons: true,
-    );
-
-    filteredApps.forEach((app) {
-      apps[app.appName.toLowerCase()] = app;
-    });
-
-    filteredApps.sort((s1, s2) => s1.appName.compareTo(s2.appName));
-
-    return true;
-  }
-
-  Widget buildSingleApp({dynamic app}) {
+  Widget buildSingleApp({String packageName}) {
     double height = mediaQuery.size.height;
     double width = mediaQuery.size.width;
     double side = min((height / 4) - 30, (width / 2) - 30);
-    if (app == null) {
+    if (packageName == null) {
       return Container(
         margin: const EdgeInsets.all(15.0),
         width: side,
@@ -63,9 +44,13 @@ class _SearchPageState extends State<SearchPage> {
       );
     }
 
+    dynamic app = storage.getApp(
+      packageName: packageName,
+    );
+
     return GestureDetector(
       onTap: () async {
-        await DeviceApps.openApp(app.packageName);
+        await DeviceApps.openApp(packageName);
       },
       child: NeumorphicContainer(
         margin: const EdgeInsets.all(15.0),
@@ -110,32 +95,31 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  void search() async {
-    if (apps == null) {
-      await getApps();
+  void search({String search}) async {
+    if (filteredApps == null) {
+      filteredApps = [];
     }
-
     filteredApps.clear();
 
-    String search = searchController.text.toLowerCase();
+    search = search.toLowerCase();
 
     if (search == "") {
       setState(() {
-        filteredApps = apps.values.toList();
-        filteredApps.sort((s1, s2) => s1.appName.compareTo(s2.appName));
+        filteredApps = null;
       });
       return;
     }
 
-    List<String> appnames = apps.keys.toList();
+    List<String> appnames = storage.getAppNames();
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
       if (appnames.length <= 0) {
         break;
       }
       BestMatch match = StringSimilarity.findBestMatch(search, appnames);
       String key = appnames.removeAt(match.bestMatchIndex);
-      filteredApps.add(apps[key]);
+
+      filteredApps.add(storage.getPackageName(appName: key));
     }
 
     setState(() {});
@@ -144,48 +128,39 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
+
+    if (filteredApps == null) {
+      filteredApps = storage.getMostUsedApps(amount: 6);
+    }
+
     return Material(
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Hero(
-                tag: "searchInput",
-                child: InputField(
-                  title: "Search",
-                  controller: searchController,
-                  onChanged: (input) {
-                    search();
-                  },
-                  autoFocus: true,
-                ),
-              ),
-              FutureBuilder(
-                future: getApps(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState != ConnectionState.done ||
-                      !snapshot.hasData ||
-                      snapshot.data != true ||
-                      filteredApps == null) {
-                    return Container();
-                  }
-
-                  return Wrap(
-                    runAlignment: WrapAlignment.end,
-                    crossAxisAlignment: WrapCrossAlignment.end,
-                    children: filteredApps
-                        .map(
-                          (app) => buildSingleApp(
-                            app: app,
-                          ),
-                        )
-                        .toList(),
-                  );
+        child: Column(
+          children: [
+            Hero(
+              tag: "searchInput",
+              child: InputField(
+                title: "Search",
+                controller: searchController,
+                onChanged: (input) {
+                  search(search: input);
                 },
+                autoFocus: true,
               ),
-            ],
-          ),
+            ),
+            Wrap(
+              runAlignment: WrapAlignment.end,
+              crossAxisAlignment: WrapCrossAlignment.end,
+              children: filteredApps
+                  .map(
+                    (package) => buildSingleApp(
+                      packageName: package,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
         ),
       ),
     );
