@@ -21,7 +21,17 @@ void main() async {
         backgroundColor: Colors.blueGrey[800],
         primaryColor: Colors.orange[800],
       ),
-      home: Body(),
+      home: FutureBuilder(
+        future: locator.allReady(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Material(
+              color: Theme.of(context).backgroundColor,
+            );
+          }
+          return Body();
+        },
+      ),
     ),
   );
 }

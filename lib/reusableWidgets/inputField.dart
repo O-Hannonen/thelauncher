@@ -10,6 +10,7 @@ class InputField extends StatelessWidget {
   final String hintText;
   final Function(String input) onSubmitted;
   final Function(String input) onChanged;
+  final Function() onTap;
   final bool obscureText;
   final String title;
   final bool allowMultipleLines;
@@ -27,6 +28,7 @@ class InputField extends StatelessWidget {
     this.onChanged,
     this.title,
     this.allowMultipleLines = false,
+    this.onTap,
     this.action,
     this.color,
     this.readOnly = false,
@@ -49,6 +51,11 @@ class InputField extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: TextField(
+          onTap: () {
+            if (onTap != null) {
+              onTap();
+            }
+          },
           readOnly: readOnly,
           showCursor: showCursor,
           autofocus: autoFocus,

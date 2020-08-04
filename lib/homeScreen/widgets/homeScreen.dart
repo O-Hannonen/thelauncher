@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:device_apps/device_apps.dart';
+import 'package:launcher_helper/launcher_helper.dart';
 import 'package:thelauncher/reusableWidgets/neumorphicContainer.dart';
 import 'package:thelauncher/services/service_locator.dart';
 import 'package:thelauncher/services/storageService.dart';
@@ -37,14 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    dynamic app = storage.getApp(packageName: packageName);
+    Application app = storage.getApp(packageName: packageName);
 
     return GestureDetector(
       onTap: () async {
         storage.increaseAppUsage(
           packageName: packageName,
         );
-        await DeviceApps.openApp(packageName);
+        LauncherHelper.launchApp(packageName);
       },
       child: NeumorphicContainer(
         margin: const EdgeInsets.all(15.0),
@@ -61,22 +61,13 @@ class _HomeScreenState extends State<HomeScreen> {
               style: Style.emboss,
               margin: const EdgeInsets.all(5.0),
               padding: const EdgeInsets.all(5.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(500),
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                    Colors.grey,
-                    BlendMode.saturation,
-                  ),
-                  child: Image.memory(
-                    app.icon,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: app.icon,
               ),
             ),
             Text(
-              app.appName ?? "",
+              app.label ?? "",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15.0,
@@ -99,17 +90,19 @@ class _HomeScreenState extends State<HomeScreen> {
         mediaQuery.viewInsets.bottom -
         mediaQuery.padding.bottom;
 
-    List<String> packages = storage.getMostUsedApps(amount: 8);
+    List<String> packages =
+        storage.getMostUsedApps(amount: 8).reversed.toList();
 
     return Material(
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
+        bottom: false,
         child: Container(
           height: height,
           width: width,
           child: Wrap(
-            runAlignment: WrapAlignment.end,
-            crossAxisAlignment: WrapCrossAlignment.end,
+            runAlignment: WrapAlignment.spaceEvenly,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: List.generate(
               8,
               (i) => buildSingleApp(

@@ -29,17 +29,17 @@ class _BodyState extends State<Body> {
   }
 
   void _scrollListener() {
-    if (verticalController.offset <=
-        mediaQuery.size.height -
-            mediaQuery.viewPadding.top -
-            mediaQuery.size.width * 0.15 -
-            30) {
+    if (verticalController.offset <= mediaQuery.size.height - 50) {
       verticalController.animateToPage(
         1,
-        duration: Duration(milliseconds: 150),
+        duration: Duration(milliseconds: 1000),
         curve: Curves.ease,
       );
-      Get.to(SearchPage(), duration: Duration(milliseconds: 0));
+      Get.to(
+        SearchPage(),
+        duration: Duration(milliseconds: 150),
+        transition: Transition.noTransition,
+      );
     }
   }
 
@@ -63,54 +63,41 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
-    return FutureBuilder(
-      future: locator.allReady(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          print("waiting for locator to be ready");
-          return Material(
-            color: Theme.of(context).backgroundColor,
-          );
-        }
+    return PageView(
+      scrollDirection: Axis.horizontal,
+      controller: horizontalController,
+      children: [
+        // widgets page
+        buildPage(Colors.blue),
 
-        print("building pageview");
-        return PageView(
-          scrollDirection: Axis.horizontal,
-          controller: horizontalController,
+        PageView(
+          scrollDirection: Axis.vertical,
+          controller: verticalController,
           children: [
-            // widgets page
-            buildPage(Colors.blue),
-
-            PageView(
-              scrollDirection: Axis.vertical,
-              controller: verticalController,
-              children: [
-                //search page
-                Material(
-                  color: Theme.of(context).backgroundColor,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Hero(
-                        tag: "searchInput",
-                        child: InputField(
-                          title: "Search",
-                        ),
-                      ),
-                    ],
+            //search page
+            Material(
+              color: Theme.of(context).backgroundColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Hero(
+                    tag: "searchInput",
+                    child: InputField(
+                      title: "Search",
+                    ),
                   ),
-                ),
-                // home screen
-                HomeScreen(),
-                // contacts
-                buildPage(Colors.orange),
-              ],
+                ],
+              ),
             ),
-            // news page
-            buildPage(Colors.yellow),
+            // home screen
+            HomeScreen(),
+            // contacts
+            buildPage(Colors.orange),
           ],
-        );
-      },
+        ),
+        // news page
+        buildPage(Colors.yellow),
+      ],
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:thelauncher/services/storageService.dart';
 
+import 'calculatorService.dart';
+
 GetIt locator = GetIt.instance;
 
 Future setupServiceLocator() async {
@@ -12,4 +14,5 @@ Future setupServiceLocator() async {
       return storage;
     },
   );
+  locator.registerSingleton(CalculatorService());
 }

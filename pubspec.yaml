@@ -32,11 +32,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  device_apps: ^1.1.0
+  launcher_helper: ^0.4.6+hotfix.1
   get: ^3.3.0
   string_similarity: ^1.0.1
   get_it: ^4.0.2
   get_storage: ^1.2.1
+  math_expressions: ^2.0.0
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

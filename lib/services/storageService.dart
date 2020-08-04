@@ -1,15 +1,13 @@
-import 'package:device_apps/device_apps.dart';
+import 'package:launcher_helper/launcher_helper.dart';
 import 'package:get_storage/get_storage.dart';
 
 class StorageService {
   final storage = GetStorage();
-  List apps;
+  List<Application> apps;
 
   Future initializeStorage() async {
-    apps = await DeviceApps.getInstalledApplications(
-      onlyAppsWithLaunchIntent: true,
-      includeAppIcons: true,
-    );
+    ApplicationCollection _apps = await LauncherHelper.getApplications();
+    apps = _apps.toList();
 
     var appMap = storage.read("appMap") ?? {};
 
@@ -36,8 +34,11 @@ class StorageService {
     return sortedKeys.reversed.toList().take(amount).toList();
   }
 
-  dynamic getApp({String packageName}) {
-    return apps.firstWhere((app) => app.packageName == packageName);
+  Application getApp({String packageName}) {
+    return apps.firstWhere(
+      (app) => app.packageName == packageName,
+      orElse: () => null,
+    );
   }
 
   List<String> getApps() {
@@ -45,7 +46,8 @@ class StorageService {
   }
 
   String getPackageName({String appName}) {
-    dynamic app = apps.firstWhere((a) => a.appName == appName);
+    Application app =
+        apps.firstWhere((a) => a.label == appName, orElse: () => null);
     if (app != null) {
       return app.packageName;
     }
@@ -53,7 +55,7 @@ class StorageService {
   }
 
   List<String> getAppNames() {
-    return apps.map<String>((app) => app.appName).toList();
+    return apps.map<String>((app) => app.label).toList();
   }
 
   void increaseAppUsage({String packageName}) {
