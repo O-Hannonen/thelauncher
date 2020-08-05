@@ -3,6 +3,7 @@ import 'package:string_similarity/string_similarity.dart';
 import 'package:flutter/material.dart';
 import 'package:thelauncher/reusableWidgets/inputField.dart';
 import 'package:launcher_helper/launcher_helper.dart';
+import 'package:thelauncher/reusableWidgets/neumorphicButton.dart';
 import 'package:thelauncher/reusableWidgets/neumorphicContainer.dart';
 import 'package:thelauncher/services/calculatorService.dart';
 import 'package:thelauncher/services/service_locator.dart';
@@ -82,48 +83,48 @@ class _SearchPageState extends State<SearchPage> {
 
     return Flexible(
       flex: 1,
-      child: GestureDetector(
+      child: NeumorphicButton(
         onTap: () async {
           storage.increaseAppUsage(
             packageName: packageName,
           );
+          Get.focusScope.unfocus();
+          Get.back();
           await LauncherHelper.launchApp(packageName);
         },
-        child: NeumorphicContainer(
-          margin: const EdgeInsets.all(15.0),
-          padding: const EdgeInsets.all(15.0),
-          width: width - 30,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: NeumorphicContainer(
-                  width: width * 0.3,
-                  height: width * 0.3,
-                  shape: BoxShape.circle,
-                  style: Style.emboss,
-                  margin: const EdgeInsets.all(5.0),
-                  padding: const EdgeInsets.all(5.0),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(500),
-                      child: app.icon,
-                    ),
+        margin: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15.0),
+        width: width - 30,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: NeumorphicContainer(
+                width: width * 0.3,
+                height: width * 0.3,
+                shape: BoxShape.circle,
+                style: Style.emboss,
+                margin: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(5.0),
+                child: FittedBox(
+                  fit: BoxFit.fill,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(500),
+                    child: app.icon,
                   ),
                 ),
               ),
-              Text(
-                app.label ?? "",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Theme.of(context).primaryColor,
-                ),
+            ),
+            Text(
+              app.label ?? "",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Theme.of(context).primaryColor,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -210,7 +211,7 @@ class _SearchPageState extends State<SearchPage> {
                     Flexible(
                       flex: 1,
                       child: NeumorphicContainer(
-                        width: width(context) - 60,
+                        width: Get.width - 60,
                         margin: const EdgeInsets.all(15.0),
                         child: Text(
                           "=${calculationResult.toString().length > 10 ? calculationResult.toString().substring(0, 11) + "..." : calculationResult}",
@@ -241,8 +242,8 @@ class _SearchPageState extends State<SearchPage> {
             alignment: Alignment.topCenter,
             child: Container(
               margin: const EdgeInsets.all(15.0),
-              height: width(context) * 0.15,
-              width: width(context) * 0.15,
+              height: Get.width * 0.15,
+              width: Get.width * 0.15,
               padding: const EdgeInsets.all(5.0),
               child: FittedBox(
                 fit: BoxFit.scaleDown,

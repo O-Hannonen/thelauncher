@@ -18,6 +18,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   PageController verticalController;
   PageController horizontalController;
+  int verticalPage = 1;
   MediaQueryData mediaQuery;
 
   @override
@@ -29,7 +30,11 @@ class _BodyState extends State<Body> {
   }
 
   void _scrollListener() {
-    if (verticalController.offset <= mediaQuery.size.height - 50) {
+    if (verticalController.offset <=
+        mediaQuery.size.height -
+            mediaQuery.viewPadding.top -
+            mediaQuery.size.width * 0.15 -
+            30) {
       verticalController.animateToPage(
         1,
         duration: Duration(milliseconds: 1000),
@@ -63,41 +68,50 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
-    return PageView(
-      scrollDirection: Axis.horizontal,
-      controller: horizontalController,
-      children: [
-        // widgets page
-        buildPage(Colors.blue),
+    return Material(
+      color: Theme.of(context).backgroundColor,
+      child: PageView(
+        scrollDirection: Axis.horizontal,
+        physics: verticalPage == 1 ? null : NeverScrollableScrollPhysics(),
+        controller: horizontalController,
+        children: [
+          // widgets page
+          buildPage(Colors.blue),
 
-        PageView(
-          scrollDirection: Axis.vertical,
-          controller: verticalController,
-          children: [
-            //search page
-            Material(
-              color: Theme.of(context).backgroundColor,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Hero(
-                    tag: "searchInput",
-                    child: InputField(
-                      title: "Search",
+          PageView(
+            scrollDirection: Axis.vertical,
+            controller: verticalController,
+            onPageChanged: (page) {
+              setState(() {
+                verticalPage = page;
+              });
+            },
+            children: [
+              //search page
+              Material(
+                color: Theme.of(context).backgroundColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Hero(
+                      tag: "searchInput",
+                      child: InputField(
+                        title: "Search",
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            // home screen
-            HomeScreen(),
-            // contacts
-            buildPage(Colors.orange),
-          ],
-        ),
-        // news page
-        buildPage(Colors.yellow),
-      ],
+              // home screen
+              HomeScreen(),
+              // contacts
+              buildPage(Colors.orange),
+            ],
+          ),
+          // news page
+          buildPage(Colors.yellow),
+        ],
+      ),
     );
   }
 }

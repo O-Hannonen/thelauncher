@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:launcher_helper/launcher_helper.dart';
+import 'package:thelauncher/reusableWidgets/neumorphicButton.dart';
 import 'package:thelauncher/reusableWidgets/neumorphicContainer.dart';
 import 'package:thelauncher/services/service_locator.dart';
 import 'package:thelauncher/services/storageService.dart';
@@ -39,43 +40,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Application app = storage.getApp(packageName: packageName);
 
-    return GestureDetector(
+    return NeumorphicButton(
       onTap: () async {
         storage.increaseAppUsage(
           packageName: packageName,
         );
         LauncherHelper.launchApp(packageName);
       },
-      child: NeumorphicContainer(
-        margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.all(15.0),
-        width: side,
-        height: side,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            NeumorphicContainer(
-              width: (side - 40) * 0.5,
-              height: (side - 40) * 0.5,
-              shape: BoxShape.circle,
-              style: Style.emboss,
-              margin: const EdgeInsets.all(5.0),
-              padding: const EdgeInsets.all(5.0),
-              child: FittedBox(
-                fit: BoxFit.fill,
+      margin: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
+      width: side,
+      height: side,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          NeumorphicContainer(
+            width: (side - 40) * 0.5,
+            height: (side - 40) * 0.5,
+            shape: BoxShape.circle,
+            style: Style.emboss,
+            margin: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(5.0),
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(500),
                 child: app.icon,
               ),
             ),
-            Text(
-              app.label ?? "",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 15.0,
-                color: Theme.of(context).primaryColor,
-              ),
+          ),
+          Text(
+            app.label ?? "",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15.0,
+              color: Theme.of(context).primaryColor,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

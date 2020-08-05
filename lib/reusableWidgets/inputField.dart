@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thelauncher/reusableWidgets/neumorphicContainer.dart';
-
-import '../main.dart';
+import 'package:get/get.dart';
 
 class InputField extends StatelessWidget {
   final TextEditingController controller;
@@ -45,8 +44,8 @@ class InputField extends StatelessWidget {
       margin: const EdgeInsets.all(15.0),
       alignment: Alignment.center,
       padding: EdgeInsets.zero,
-      width: width(context),
-      height: width(context) * 0.15,
+      width: Get.width,
+      height: Get.width * 0.15,
       borderRadius: BorderRadius.circular(50.0),
       child: Material(
         color: Colors.transparent,
