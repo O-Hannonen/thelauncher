@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:thelauncher/searchPage/widgets/searchPage.dart';
 import 'package:thelauncher/services/service_locator.dart';
 
+import 'newsScreen/widgets/newsScreen.dart';
+
 /// The body of this launcher. By default displays the main screen of the launcher,
 /// but also handles all the swiping gestures etc...
 
@@ -109,7 +111,7 @@ class _BodyState extends State<Body> {
             ],
           ),
           // news page
-          buildPage(Colors.yellow),
+          NewsScreen(),
         ],
       ),
     );

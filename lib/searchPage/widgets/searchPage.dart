@@ -44,7 +44,8 @@ class _SearchPageState extends State<SearchPage> {
         duration: Duration(milliseconds: 150),
         curve: Curves.ease,
       );
-      FocusScope.of(context).requestFocus(searchNode);
+      Get.focusScope.unfocus();
+      Get.focusScope.requestFocus(searchNode);
     } else if (pageController.offset >=
         mediaQuery.size.height +
             mediaQuery.viewPadding.top +

@@ -38,6 +38,8 @@ dev_dependencies:
   get_it: ^4.0.2
   get_storage: ^1.2.1
   math_expressions: ^2.0.0
+  http: ^0.12.2
+  cached_network_image: ^2.2.0+1
   
 
 # For information on the generic Dart part of this file, see the
