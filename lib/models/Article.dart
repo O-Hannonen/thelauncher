@@ -9,6 +9,12 @@ class Article {
       : this.section = map["section"],
         this.title = map["title"],
         this.absctract = map["abstract"],
-        this.newsUrl = map["uri"],
-        this.images = map["multimedia"].map((media) => media["url"]).toList();
+        this.newsUrl = map["url"],
+        this.images = map["media"] != null
+            ? List<String>.from(map["media"]
+                .map((media) => media["media-metadata"] != null
+                    ? media["media-metadata"].last["url"]
+                    : null)
+                .toList())
+            : List<String>();
 }

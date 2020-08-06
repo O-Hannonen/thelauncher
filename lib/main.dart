@@ -12,6 +12,7 @@ void main() async {
       theme: ThemeData(
         backgroundColor: Colors.blueGrey[800],
         primaryColor: Colors.orange[800],
+        primarySwatch: Colors.orange,
       ),
       home: FutureBuilder(
         future: locator.allReady(),

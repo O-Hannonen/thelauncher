@@ -4,20 +4,13 @@ import 'package:thelauncher/models/Article.dart';
 
 class NewsService {
   static const String API_KEY = "oUMZC9Wn9sS2kJedVB3R12y0PMjVNpmm";
-  final String _baseUrl = "api.nytimes.com";
 
-  Future<List<Article>> fetchArticlesBySection({String section}) async {
-    Map<String, String> parameters = {
-      'api-key': API_KEY,
-    };
-    Uri uri = Uri.https(
-      _baseUrl,
-      '/svc/topstories/v2/$section.json',
-      parameters,
-    );
-
+  Future<List<Article>> fetchTopArticlesToday() async {
     try {
-      var response = await http.get(uri);
+      var response = await http.get(
+        "https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=$API_KEY",
+      );
+
       Map<String, dynamic> data = json.decode(response.body);
 
       List<Article> articles = List<Article>();
