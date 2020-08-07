@@ -35,7 +35,9 @@ class _SearchPageState extends State<SearchPage> {
     searchController = TextEditingController();
     pageController = PageController(initialPage: 1);
     pageController.addListener(_scrollListener);
-    storage.initializeStorage();
+    WidgetsBinding.instance.addPostFrameCallback((time) {
+      storage.initializeStorage();
+    });
   }
 
   void _scrollListener() {
