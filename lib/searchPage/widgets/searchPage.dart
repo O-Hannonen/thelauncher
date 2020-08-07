@@ -36,7 +36,9 @@ class _SearchPageState extends State<SearchPage> {
     pageController = PageController(initialPage: 1);
     pageController.addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((time) {
-      storage.initializeStorage();
+      Future.delayed(Duration(milliseconds: 300), () {
+        storage.initializeStorage();
+      });
     });
   }
 
@@ -47,7 +49,7 @@ class _SearchPageState extends State<SearchPage> {
         duration: Duration(milliseconds: 150),
         curve: Curves.ease,
       );
-      Get.focusScope.unfocus();
+
       Get.focusScope.requestFocus(searchNode);
     } else if (pageController.offset >=
         mediaQuery.size.height +
