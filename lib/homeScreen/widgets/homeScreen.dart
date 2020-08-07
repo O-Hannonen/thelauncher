@@ -42,9 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return NeumorphicButton(
       onTap: () async {
-        storage.increaseAppUsage(
-          packageName: packageName,
-        );
         LauncherHelper.launchApp(packageName);
       },
       margin: const EdgeInsets.all(15.0),
