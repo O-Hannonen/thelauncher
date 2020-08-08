@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:flutter/material.dart';
 import 'package:thelauncher/reusableWidgets/inputField.dart';
@@ -9,7 +8,6 @@ import 'package:thelauncher/services/calculatorService.dart';
 import 'package:thelauncher/services/service_locator.dart';
 import 'package:thelauncher/services/storageService.dart';
 import 'package:get/get.dart';
-import '../../main.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
@@ -37,7 +35,7 @@ class _SearchPageState extends State<SearchPage> {
     pageController.addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((time) {
       Future.delayed(Duration(milliseconds: 300), () {
-        storage.initializeStorage();
+        storage.refreshApps();
       });
     });
   }
