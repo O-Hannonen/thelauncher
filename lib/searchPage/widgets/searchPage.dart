@@ -42,22 +42,25 @@ class _SearchPageState extends State<SearchPage> {
 
   void _scrollListener() {
     if (pageController.offset < mediaQuery.size.height - 50) {
-      pageController.animateToPage(
+      pageController.jumpToPage(
         1,
-        duration: Duration(milliseconds: 150),
-        curve: Curves.ease,
       );
+      print("should refocus");
+      searchNode.unfocus();
 
-      Get.focusScope.requestFocus(searchNode);
+      setState(() {
+        searchNode = FocusNode();
+      });
+      searchNode.requestFocus();
     } else if (pageController.offset >=
         mediaQuery.size.height +
             mediaQuery.viewPadding.top +
             mediaQuery.size.width * 0.15 +
             30) {
-      FocusScope.of(context).unfocus();
+      searchNode.unfocus();
       Get.back();
     } else if (pageController.offset > mediaQuery.size.height + 50) {
-      FocusScope.of(context).unfocus();
+      searchNode.unfocus();
     }
   }
 
@@ -178,89 +181,107 @@ class _SearchPageState extends State<SearchPage> {
       filteredApps = List<String>();
     }
 
-    return PageView(
-      scrollDirection: Axis.vertical,
-      controller: pageController,
-      children: [
-        Material(
-          color: Theme.of(context).backgroundColor,
-        ),
-        Scaffold(
-          resizeToAvoidBottomPadding: true,
-          backgroundColor: Theme.of(context).backgroundColor,
-          body: SafeArea(
-            child: Container(
-              constraints: BoxConstraints(
-                maxHeight: mediaQuery.size.height -
-                    mediaQuery.viewPadding.top -
-                    mediaQuery.viewPadding.bottom -
-                    mediaQuery.viewInsets.top -
-                    mediaQuery.viewInsets.bottom,
-              ),
-              child: Column(
-                children: [
-                  Hero(
-                    tag: "searchInput",
-                    child: InputField(
-                      title: "Search",
-                      focusNode: searchNode,
-                      controller: searchController,
-                      onChanged: (input) {
-                        search(search: input);
-                      },
-                      autoFocus: true,
+    return Material(
+      color: Theme.of(context).backgroundColor,
+      child: PageView(
+        scrollDirection: Axis.vertical,
+        controller: pageController,
+        children: [
+          Material(
+            color: Theme.of(context).backgroundColor,
+          ),
+          Scaffold(
+            resizeToAvoidBottomPadding: true,
+            backgroundColor: Theme.of(context).backgroundColor,
+            body: SafeArea(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: mediaQuery.size.height -
+                      mediaQuery.viewPadding.top -
+                      mediaQuery.viewPadding.bottom -
+                      mediaQuery.viewInsets.top -
+                      mediaQuery.viewInsets.bottom,
+                ),
+                child: Column(
+                  children: [
+                    Hero(
+                      tag: "searchInput",
+                      child: InputField(
+                        title: "Search",
+                        onSubmitted: (input) {
+                          dynamic result = calculator.calculate(input: input);
+                          if (result != null) {
+                            setState(() {
+                              calculationResult = num.parse("$result");
+                              searchController.text =
+                                  calculationResult.toString();
+                            });
+
+                            searchController.selection =
+                                TextSelection.fromPosition(TextPosition(
+                                    offset: searchController.text.length));
+                            searchNode.requestFocus();
+                          }
+                        },
+                        focusNode: searchNode,
+                        controller: searchController,
+                        onChanged: (input) {
+                          search(search: input);
+                        },
+                        autoFocus: true,
+                      ),
                     ),
-                  ),
-                  if (calculationResult != null)
-                    Flexible(
-                      flex: 1,
-                      child: NeumorphicContainer(
-                        width: Get.width - 60,
-                        margin: const EdgeInsets.all(15.0),
-                        child: Text(
-                          "=${calculationResult.toString().length > 10 ? calculationResult.toString().substring(0, 11) + "..." : calculationResult}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 35.0,
-                            fontWeight: FontWeight.bold,
+                    if (calculationResult != null)
+                      Flexible(
+                        flex: 1,
+                        child: NeumorphicContainer(
+                          width: Get.width - 60,
+                          margin: const EdgeInsets.all(15.0),
+                          child: Text(
+                            "=${calculationResult.toString().length > 10 ? calculationResult.toString().substring(0, 11) + "..." : calculationResult}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 35.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ...filteredApps
-                      .map(
-                        (package) => buildSingleApp(
-                          packageName: package,
-                        ),
-                      )
-                      .toList(),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Material(
-          color: Theme.of(context).backgroundColor,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              margin: const EdgeInsets.all(15.0),
-              height: Get.width * 0.15,
-              width: Get.width * 0.15,
-              padding: const EdgeInsets.all(5.0),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Icon(
-                  Icons.close,
-                  color: Theme.of(context).primaryColor,
-                  size: 50,
+                    ...filteredApps
+                        .map(
+                          (package) => buildSingleApp(
+                            packageName: package,
+                          ),
+                        )
+                        .toList(),
+                  ],
                 ),
               ),
             ),
           ),
-        ),
-      ],
+          Material(
+            color: Theme.of(context).backgroundColor,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                margin: const EdgeInsets.all(15.0),
+                height: Get.width * 0.15,
+                width: Get.width * 0.15,
+                padding: const EdgeInsets.all(5.0),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Icon(
+                    Icons.close,
+                    color: Theme.of(context).primaryColor,
+                    size: 50,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
