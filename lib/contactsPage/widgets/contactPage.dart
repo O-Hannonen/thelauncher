@@ -49,7 +49,12 @@ class _ContactPageState extends State<ContactPage> {
         duration: Duration(milliseconds: 150),
         curve: Curves.linear,
       );
-      FocusScope.of(context).requestFocus(searchNode);
+      searchNode.unfocus();
+
+      setState(() {
+        searchNode = FocusNode();
+      });
+      searchNode.requestFocus();
     } else if (controller.offset <= Get.height - 100) {
       Get.focusScope.unfocus();
       Get.back();
@@ -178,30 +183,33 @@ class _ContactPageState extends State<ContactPage> {
     if (results.length == 0) {
       results.addAll(storage.getMostUsedContacts(amount: 3));
     }
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: PageView(
+    return Material(
+      color: Theme.of(context).backgroundColor,
+      child: PageView(
         scrollDirection: Axis.vertical,
         controller: controller,
         children: [
           Container(),
-          SafeArea(
-            child: Column(
-              children: [
-                ...results
-                    .map((contact) => buildSingleContact(contact: contact))
-                    .toList(),
-                InputField(
-                  controller: searchController,
-                  title: "Search",
-                  focusNode: searchNode,
-                  onChanged: (input) {
-                    search(input: input);
-                  },
-                ),
-              ],
+          Scaffold(
+            resizeToAvoidBottomInset: true,
+            resizeToAvoidBottomPadding: true,
+            backgroundColor: Theme.of(context).backgroundColor,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  ...results
+                      .map((contact) => buildSingleContact(contact: contact))
+                      .toList(),
+                  InputField(
+                    controller: searchController,
+                    title: "Search",
+                    focusNode: searchNode,
+                    onChanged: (input) {
+                      search(input: input);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           Container(),
