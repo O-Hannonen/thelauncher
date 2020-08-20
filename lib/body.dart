@@ -5,6 +5,7 @@ import 'package:thelauncher/reusableWidgets/inputField.dart';
 import 'package:get/get.dart';
 import 'package:thelauncher/reusableWidgets/neumorphicButton.dart';
 import 'package:thelauncher/searchPage/widgets/searchPage.dart';
+import 'package:thelauncher/widgetsPage/widgets/widgetsPage.dart';
 import 'contactsPage/widgets/contactPage.dart';
 import 'newsScreen/widgets/newsScreen.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -72,15 +73,6 @@ class _BodyState extends State<Body> {
     super.dispose();
   }
 
-  Widget buildPage(Color color) {
-    final mediaQuery = MediaQuery.of(context);
-    return Container(
-      width: mediaQuery.size.width,
-      height: mediaQuery.size.height,
-      color: color,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
@@ -122,7 +114,7 @@ class _BodyState extends State<Body> {
               controller: horizontalController,
               children: [
                 // widgets page
-                buildPage(Colors.blue),
+                WidgetsPage(),
 
                 PageView(
                   scrollDirection: Axis.vertical,

@@ -1,0 +1,34 @@
+{
+    "dataset": {
+        "version": "2.0",
+        "class": "dataset",
+        "label": "Tartuntatautirekisterin COVID-19-tapaukset",
+        "dimension": {
+            "id": [
+                "sex"
+            ],
+            "size": [
+                3
+            ],
+            "sex": {
+                "category": {
+                    "index": {
+                        "444563": 0,
+                        "444356": 1,
+                        "444328": 2
+                    },
+                    "label": {
+                        "444563": "Naiset",
+                        "444356": "Miehet",
+                        "444328": "Kaikki sukupuolet"
+                    }
+                }
+            }
+        },
+        "value": {
+            "0": "3952",
+            "1": "3890",
+            "2": "7842"
+        }
+    }
+}
