@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thelauncher/reusableWidgets/neumorphicButton.dart';
+import 'package:thelauncher/reusableWidgets/neumorphicContainer.dart';
 import 'package:thelauncher/services/covidDataService.dart';
 import 'package:thelauncher/services/service_locator.dart';
 import 'package:get/get.dart';
@@ -40,7 +41,8 @@ class _CovidStatsBoxState extends State<CovidStatsBox> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Expanded(
-                      child: Container(
+                      child: NeumorphicContainer(
+                        style: Style.emboss,
                         padding: const EdgeInsets.all(5.0),
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
@@ -58,8 +60,9 @@ class _CovidStatsBoxState extends State<CovidStatsBox> {
                       ),
                     ),
                     Expanded(
-                      child: Container(
+                      child: NeumorphicContainer(
                         padding: const EdgeInsets.all(5.0),
+                        style: Style.emboss,
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.center,
