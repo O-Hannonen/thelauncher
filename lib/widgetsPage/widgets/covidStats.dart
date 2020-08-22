@@ -39,6 +39,18 @@ class _CovidStatsBoxState extends State<CovidStatsBox> {
           : Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Text(
+                  "Covid-19 stats of Finland",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.w900,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
