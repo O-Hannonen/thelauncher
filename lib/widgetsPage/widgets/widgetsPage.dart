@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thelauncher/services/covidDataService.dart';
 import 'package:thelauncher/services/service_locator.dart';
+import 'package:thelauncher/widgetsPage/SchoolLunch.dart';
 import 'package:thelauncher/widgetsPage/widgets/covidStats.dart';
 
 class WidgetsPage extends StatefulWidget {
@@ -26,6 +27,9 @@ class _WidgetsPageState extends State<WidgetsPage> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   CovidStatsBox(
+                    key: UniqueKey(),
+                  ),
+                  SchoolLunch(
                     key: UniqueKey(),
                   ),
                 ] //children,

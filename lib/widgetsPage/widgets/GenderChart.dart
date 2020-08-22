@@ -1,4 +1,3 @@
-/// Simple pie chart example.
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
@@ -53,7 +52,6 @@ class SimplePieChart extends StatelessWidget {
   }
 }
 
-/// Sample linear data type.
 class CasesByGender {
   final String gender;
   final int cases;
