@@ -228,7 +228,7 @@ class _SearchPageState extends State<SearchPage> {
                         onChanged: (input) {
                           search(search: input);
                         },
-                        autoFocus: true,
+                        autoFocus: false,
                       ),
                     ),
                     if (calculationResult != null)
