@@ -115,8 +115,19 @@ class StorageService {
         appMap[k2],
       );
     });
+    List<String> output = List<String>();
 
-    return sortedKeys.reversed.toList().take(amount).toList();
+    for (String s in sortedKeys.reversed) {
+      if (output.length >= amount) {
+        break;
+      }
+
+      if (getApp(packageName: s) != null) {
+        output.add(s);
+      }
+    }
+
+    return output;
   }
 
   Application getApp({String packageName}) {

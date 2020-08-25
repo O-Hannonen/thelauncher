@@ -30,15 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildSingleApp({String packageName}) {
     double side = min((height / 4) - 30, (width / 2) - 30);
-    if (packageName == null) {
+    Application app = storage.getApp(packageName: packageName ?? "");
+    if (packageName == null || app == null) {
       return Container(
         margin: const EdgeInsets.all(15.0),
         width: side,
         height: side,
       );
     }
-
-    Application app = storage.getApp(packageName: packageName);
 
     return NeumorphicButton(
       onTap: () async {
