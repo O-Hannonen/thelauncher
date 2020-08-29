@@ -101,11 +101,11 @@ class _ContactPageState extends State<ContactPage> {
               bevel: 20.0,
               padding: const EdgeInsets.all(5.0),
               margin: const EdgeInsets.all(10.0),
-              width: (Get.width - 30) * 0.3,
-              height: (Get.width - 30) * 0.3,
+              width: (Get.width - 30) * 0.25,
+              height: (Get.width - 30) * 0.25,
               child: Container(
-                width: (Get.width - 30) * 0.3,
-                height: (Get.width - 30) * 0.3,
+                width: (Get.width - 30) * 0.25,
+                height: (Get.width - 30) * 0.25,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(

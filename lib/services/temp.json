@@ -1,0 +1,43 @@
+{
+    "coord": {
+        "lon": 22.67,
+        "lat": 60.45
+    },
+    "weather": [
+        {
+            "id": 800,
+            "main": "Clear",
+            "description": "clear sky",
+            "icon": "01d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 291.6,
+        "feels_like": 289.06,
+        "temp_min": 291.15,
+        "temp_max": 292.04,
+        "pressure": 1010,
+        "humidity": 52
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 3.1,
+        "deg": 120
+    },
+    "clouds": {
+        "all": 0
+    },
+    "dt": 1598691639,
+    "sys": {
+        "type": 1,
+        "id": 1364,
+        "country": "FI",
+        "sunrise": 1598671003,
+        "sunset": 1598723045
+    },
+    "timezone": 10800,
+    "id": 643153,
+    "name": "Paimio",
+    "cod": 200
+}

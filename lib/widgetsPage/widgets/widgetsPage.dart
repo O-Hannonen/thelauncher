@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:thelauncher/services/covidDataService.dart';
 import 'package:thelauncher/services/service_locator.dart';
-import 'package:thelauncher/widgetsPage/SchoolLunch.dart';
+import 'package:thelauncher/widgetsPage/widgets/SchoolLunch.dart';
 import 'package:thelauncher/widgetsPage/widgets/covidStats.dart';
+import 'package:thelauncher/widgetsPage/widgets/weatherWidget.dart';
 
 class WidgetsPage extends StatefulWidget {
   WidgetsPage({Key key}) : super(key: key);
@@ -32,6 +33,9 @@ class _WidgetsPageState extends State<WidgetsPage> {
                   SchoolLunch(
                     key: UniqueKey(),
                   ),
+                  WeatherWidget(
+                    key: UniqueKey(),
+                  )
                 ] //children,
                 ),
           ),

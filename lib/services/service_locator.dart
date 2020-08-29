@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:thelauncher/services/schoolLunchService.dart';
 import 'package:thelauncher/services/storageService.dart';
+import 'package:thelauncher/services/weatherService.dart';
 
 import 'calculatorService.dart';
 import 'covidDataService.dart';
@@ -21,4 +22,5 @@ Future setupServiceLocator() async {
   locator.registerSingleton(NewsService());
   locator.registerSingleton(CovidDataService());
   locator.registerSingleton(SchoolLunchService());
+  locator.registerSingleton(WeatherService());
 }
