@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thelauncher/services/covidDataService.dart';
-import 'package:thelauncher/services/service_locator.dart';
+import 'package:thelauncher/widgetsPage/widgets/HomeControl.dart';
 import 'package:thelauncher/widgetsPage/widgets/SchoolLunch.dart';
 import 'package:thelauncher/widgetsPage/widgets/covidStats.dart';
 import 'package:thelauncher/widgetsPage/widgets/weatherWidget.dart';
@@ -28,6 +27,9 @@ class _WidgetsPageState extends State<WidgetsPage> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   CovidStatsBox(
+                    key: UniqueKey(),
+                  ),
+                  HomeControl(
                     key: UniqueKey(),
                   ),
                   SchoolLunch(

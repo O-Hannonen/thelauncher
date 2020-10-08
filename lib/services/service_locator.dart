@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:thelauncher/services/homeControlService.dart';
 import 'package:thelauncher/services/schoolLunchService.dart';
 import 'package:thelauncher/services/storageService.dart';
 import 'package:thelauncher/services/weatherService.dart';
@@ -23,4 +24,5 @@ Future setupServiceLocator() async {
   locator.registerSingleton(CovidDataService());
   locator.registerSingleton(SchoolLunchService());
   locator.registerSingleton(WeatherService());
+  locator.registerSingleton(HomeControlService());
 }

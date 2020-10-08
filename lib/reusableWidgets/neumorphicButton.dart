@@ -99,7 +99,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                   pressed = true;
                 });
               }
-              await Future.delayed(Duration(milliseconds: 100), () => null);
+              await Future.delayed(Duration(milliseconds: 150), () => null);
               if (pressed == true) {
                 if (mounted) {
                   setState(() {
@@ -108,7 +108,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                 }
               }
               if (widget.onTap != null) {
-                widget.onTap();
+                await widget.onTap();
               }
             }
           : () {
