@@ -83,7 +83,7 @@ class _CovidStatsBoxState extends State<CovidStatsBox> {
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.center,
                           child: Text(
-                            "Today\n${data.totalCasesByDay[data.totalCasesByDay.length - 2]}",
+                            "Today\n${data.totalCasesByDay[data.totalCasesByDay.length - 3]}",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20.0,
